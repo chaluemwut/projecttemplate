@@ -1,0 +1,25 @@
+version: '3'
+services:
+  api:
+    image: chaluemwut/maven-jdk9
+    working_dir: /api
+    volumes:
+      - ./.m2:/root/.m2
+      - ./api:/api
+    ports:
+      - 8080:8080     
+    links:      
+      - db
+    environment:  
+      - db_name=project
+      - db_password=1234
+    command: mvn spring-boot:run  
+
+  db:
+    image: mysql
+    restart: always
+    volumes:
+      - ./server/mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_DATABASE=project
